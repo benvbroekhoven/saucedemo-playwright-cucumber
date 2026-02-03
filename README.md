@@ -3,13 +3,13 @@ A clean, modular, enterprise‑grade UI test automation framework built with:
 
 Playwright for Java
 
-Cucumber (BDD)
+Cucumber (BDD) 
 
 JUnit
 
 Allure Reporting
 
-Page Object Model + Flows architecture
+PageObject Model + Flows architecture
 
 This project demonstrates a scalable, maintainable approach to UI automation using modern tooling and clean design patterns.
 
