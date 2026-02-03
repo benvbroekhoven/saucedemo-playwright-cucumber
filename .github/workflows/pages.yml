@@ -36,8 +36,7 @@ jobs:
 
       - name: Generate Allure report
         run: |
-          mkdir -p site
-          cp index.html site/index.html
+          mkdir -p site      
           allure generate target/allure-results --clean -o site/allure-report
 
       - name: Upload Pages artifact
