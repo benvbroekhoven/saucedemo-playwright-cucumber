@@ -56,7 +56,7 @@ jobs:
       - name: Generate Allure report
         run: |
           mkdir -p site
-          allure generate target/allure-results --clean -o site/allure-report
+          aallure generate target/allure-results --clean -o site/allure-report
 
       - name: Copy index.html to site root
         run: cp index.html site/index.html
