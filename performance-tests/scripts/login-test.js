@@ -2,9 +2,14 @@ import http from 'k6/http';
 import { check, sleep } from 'k6';
 
 export const options = {
-    vus: 10,            // 10 gelijktijdige gebruikers
-    duration: '30s',    // test duurt 30 seconden
+    vus: 10,
+    duration: '30s',
+    thresholds: {
+        http_req_duration: ['p(95)<500'],   // 95% van requests < 500ms
+        http_req_failed: ['rate<0.01'],     // minder dan 1% failures
+    },
 };
+
 
 export default function () {
     // 1. Open de loginpagina
