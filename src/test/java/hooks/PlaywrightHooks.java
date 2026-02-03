@@ -1,11 +1,9 @@
 package hooks;
 
-import com.microsoft.playwright.Page;
 import drivers.PlaywrightFactory;
 import io.cucumber.java.After;
 import io.cucumber.java.Before;
 import io.qameta.allure.Allure;
-import java.nio.file.Paths;
 
 public class PlaywrightHooks {
 
