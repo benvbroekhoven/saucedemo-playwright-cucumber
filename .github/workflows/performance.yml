@@ -28,6 +28,9 @@ jobs:
       - name: Install chart libraries
         run: npm install chartjs-node-canvas chart.js
 
+      - name: Create results directory
+        run: mkdir -p performance-tests/results
+
       - name: Run k6 with JSON output
         run: k6 run --out json=performance-tests/results/results.json performance-tests/scripts/login-test.js
 
