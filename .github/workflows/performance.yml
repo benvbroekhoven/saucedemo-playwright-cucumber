@@ -1,0 +1,51 @@
+name: Performance Tests
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [ main ]
+
+jobs:
+  k6-performance:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Install k6
+        uses: grafana/setup-k6-action@v1
+
+      - name: Install Allure
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y default-jre
+          wget https://github.com/allure-framework/allure2/releases/download/2.29.0/allure-2.29.0.tgz
+          tar -xzf allure-2.29.0.tgz
+          sudo mv allure-2.29.0 /opt/allure
+          sudo ln -s /opt/allure/bin/allure /usr/bin/allure
+
+      - name: Run k6 with JSON output
+        run: k6 run --out json=results.json performance-tests/scripts/login-test.js
+
+      - name: Convert k6 JSON to Allure format
+        run: node performance-tests/convert-k6-to-allure.js
+
+      - name: Generate Allure report
+        run: allure generate allure-results --clean -o site/performance-report
+
+      - name: Upload performance report
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: site/performance-report
+
+  deploy:
+    needs: k6-performance
+    runs-on: ubuntu-latest
+    permissions:
+      pages: write
+      id-token: write
+
+    steps:
+      - name: Deploy to GitHub Pages
+        uses: actions/deploy-pages@v4
