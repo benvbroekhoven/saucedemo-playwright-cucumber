@@ -54,9 +54,9 @@ jobs:
 
       - name: Install Allure CLI
         run: |
-          wget https://github.com/allure-framework/allure2/releases/latest/download/allure-commandline.zip -O allure.zip
+          wget https://repo.maven.apache.org/maven2/io/qameta/allure/allure-commandline/2.24.0/allure-commandline-2.24.0.zip -O allure.zip
           unzip allure.zip -d allure-cli
-          sudo mv allure-cli/allure-* /opt/allure
+          sudo mv allure-cli/allure-commandline-2.24.0 /opt/allure
           sudo ln -s /opt/allure/bin/allure /usr/bin/allure
 
       - name: Generate Allure report
@@ -68,4 +68,5 @@ jobs:
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           publish_dir: allure-report
+
 
