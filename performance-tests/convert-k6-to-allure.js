@@ -1,6 +1,10 @@
 import fs from 'fs';
 
-const raw = JSON.parse(fs.readFileSync('results.json', 'utf8'));
+const lines = fs.readFileSync('results.json', 'utf8')
+    .trim()
+    .split('\n');
+
+const metrics = lines.map(line => JSON.parse(line));
 
 const allureDir = 'allure-results';
 if (!fs.existsSync(allureDir)) {
@@ -15,15 +19,17 @@ const result = {
     parameters: [],
 };
 
-for (const metric of raw.metrics.http_req_duration.values) {
-    result.steps.push({
-        name: "http_req_duration",
-        status: "passed",
-        start: Date.now(),
-        stop: Date.now(),
-        attachments: [],
-    });
+for (const entry of metrics) {
+    if (entry.metric === "http_req_duration") {
+        result.steps.push({
+            name: "http_req_duration",
+            status: "passed",
+            start: Date.now(),
+            stop: Date.now(),
+            attachments: [],
+        });
+    }
 }
 
 fs.writeFileSync(`${allureDir}/k6-result.json`, JSON.stringify(result, null, 2));
-console.log("Converted k6 results to Allure format");
+console.log("Converted k6 NDJSON to Allure format");
