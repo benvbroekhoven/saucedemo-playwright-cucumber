@@ -46,6 +46,15 @@ jobs:
       - name: Run tests
         run: mvn clean test
 
+      - name: Download previous Allure history
+        run: |
+          mkdir -p history
+          if wget -q https://benvbroekhoven.github.io/saucedemo-playwright-cucumber/allure-report/history/history.json -O history/history.json; then
+            echo "History found"
+          else
+            echo "No history found"
+          fi
+
       - name: Install Allure CLI
         run: |
           wget https://repo.maven.apache.org/maven2/io/qameta/allure/allure-commandline/2.24.0/allure-commandline-2.24.0.zip -O allure.zip
@@ -55,7 +64,8 @@ jobs:
 
       - name: Generate Allure report
         run: |
-          mkdir -p site
+          mkdir -p site/allure-report
+          cp -r history site/allure-report/history || true
           allure generate target/allure-results --clean -o site/allure-report
 
       - name: Copy index.html to site root

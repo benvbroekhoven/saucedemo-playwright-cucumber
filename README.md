@@ -1,49 +1,77 @@
-# 🧪 SauceDemo Playwright + Cucumber Framework
-[![Allure Report](https://img.shields.io/badge/Allure-Report-ff69b4)](https://benvbroekhoven.github.io/saucedemo-playwright-cucumber/allure-report/)
-![Java](https://img.shields.io/badge/Java-21-blue)
-![Playwright](https://img.shields.io/badge/Playwright-Java-green)
-![Cucumber](https://img.shields.io/badge/Cucumber-BDD-brightgreen)
-![Maven](https://img.shields.io/badge/Maven-Build-orange)
-![GitHub Actions](https://img.shields.io/badge/CI-CD-black)
-![GitHub Pages](https://img.shields.io/badge/Deploy-GitHub%20Pages-lightgrey)
+﻿🌟 SauceDemo Playwright + Cucumber Framework
 
-Een modern, schaalbaar en enterprise‑ready testautomatiseringsframework gebouwd met **Playwright (Java)**, **Cucumber BDD**, **JUnit**, **Allure Reporting** en **GitHub Actions**.  
-Dit project demonstreert hoe je een volledige CI/CD‑gedreven teststack opzet die:
+      
 
-- browser‑tests uitvoert in parallel
-- Allure‑rapporten genereert
-- automatisch publiceert naar GitHub Pages
-- een professionele workflow volgt die geschikt is voor enterprise‑omgevingen
+Een modern, schaalbaar en enterprise‑ready testautomatiseringsframework gebouwd met Playwright (Java), Cucumber BDD, JUnit, Allure Reporting en GitHub Actions. Dit project toont mijn expertise als Senior QA Automation Engineer / Test Architect in het ontwerpen van robuuste, onderhoudbare en CI‑gedreven testframeworks.
 
-Dit framework is ontworpen als portfolio‑project om mijn expertise in **QA Automation Architecture** te tonen.
+🚀 Highlights
 
----
+✔ Moderne teststack
 
-## 🚀 Features
+Playwright Java voor snelle, stabiele browserautomatisatie
 
-### 🔹 **Playwright Java**
-- Moderne browserautomatisatie
-- Stabiele BasePage met veilige acties, waits en retry‑mechanismen
-- Parallel execution via Maven Surefire
+Cucumber BDD voor leesbare scenario’s
 
-### 🔹 **Cucumber BDD**
-- Duidelijke Gherkin‑scenario’s
-- Herbruikbare step definitions
-- Hooks voor setup/teardown
+JUnit als runner
 
-### 🔹 **Allure Reporting**
-- Automatische generatie van Allure‑rapporten
-- Publicatie naar GitHub Pages
-- Badge in README voor snelle toegang
+Allure voor rijke rapportage
 
-### 🔹 **GitHub Actions CI/CD**
-- Volledige pipeline: build → test → report → deploy
-- Playwright dependencies voor Ubuntu runners
-- Artifact publishing naar GitHub Pages
+✔ Enterprise‑kwaliteit architectuur
 
----
+Page Object Model
 
-## 📂 Projectstructuur
+Custom BasePage met veilige acties & waits
+
+Parallel execution
+
+Schone projectstructuur
+
+✔ Volledige CI/CD pipeline
+
+GitHub Actions: build → test → report → deploy
+
+Automatische Allure‑publicatie naar GitHub Pages
+
+Trend reporting, categories, executors & environment info
+
+🧱 Architectuurdiagram
+
+                          ┌──────────────────────────┐
+                          │      Test Runner         │
+                          │   (JUnit + Cucumber)     │
+                          └─────────────┬────────────┘
+                                        │
+                                        ▼
+                         ┌──────────────────────────────┐
+                         │        Feature Files          │
+                         │        (Gherkin BDD)          │
+                         └─────────────┬────────────────┘
+                                       │
+                                       ▼
+                         ┌──────────────────────────────┐
+                         │       Step Definitions        │
+                         │  (Glue tussen BDD & Java)     │
+                         └─────────────┬────────────────┘
+                                       │
+                                       ▼
+                         ┌──────────────────────────────┐
+                         │         Page Objects          │
+                         │  (BasePage + Page Classes)    │
+                         └─────────────┬────────────────┘
+                                       │
+                                       ▼
+                         ┌──────────────────────────────┐
+                         │      Playwright Factory       │
+                         │  (Browser + Context + Page)   │
+                         └─────────────┬────────────────┘
+                                       │
+                                       ▼
+                         ┌──────────────────────────────┐
+                         │       Playwright Engine       │
+                         │ (Chromium / Firefox / WebKit) │
+                         └──────────────────────────────┘
+
+📂 Projectstructuur
 
 saucedemo-playwright-cucumber/
 │
@@ -62,80 +90,162 @@ saucedemo-playwright-cucumber/
 │       │
 │       └── resources/
 │           ├── features/
-│           └── allure.properties
+│           ├── allure.properties
+│           ├── environment.properties
+│           ├── categories.json
+│           └── executor.json
 │
 ├── target/
 │   └── allure-results/
 │
 └── .github/
-└── workflows/
-└── deploy.yml
+    └── workflows/
+        └── deploy.yml
 
+🧪 Testen uitvoeren
 
----
+▶ Lokaal testen
 
-## 🧱 Technologieën
+mvn clean test
 
-| Technologie | Gebruik |
-|------------|---------|
-| **Java 21** | Testautomatisatie |
-| **Playwright Java** | Browserautomatisatie |
-| **Cucumber 7** | BDD‑structuur |
-| **JUnit** | Test runner |
-| **Maven** | Build & dependency management |
-| **Allure** | Rapportage |
-| **GitHub Actions** | CI/CD pipeline |
-| **GitHub Pages** | Hosting van rapporten |
+▶ Lokaal Allure‑rapport openen
 
----
+allure serve target/allure-results
 
 🌐 Live Allure Report
-Klik op de badge bovenaan of gebruik deze link:
 
-👉 https://benvbroekhoven.github.io/saucedemo-playwright-cucumber/allure-report/ (benvbroekhoven.github.io in Bing)
+https://benvbroekhoven.github.io/saucedemo-playwright-cucumber/allure-report/
 
-🛠️ CI/CD Pipeline
-De GitHub Actions workflow:
+Het rapport bevat:
+
+Suites
+
+Steps
+
+Screenshots
+
+Trend grafieken
+
+Categories
+
+Environment info
+
+CI executor metadata
+
+🛠️ Technologieën
+
+Technologie
+
+Rol
+
+Java 21
+
+Testautomatisatie
+
+Playwright Java
+
+Browserautomatisatie
+
+Cucumber 7
+
+BDD‑structuur
+
+JUnit
+
+Test runner
+
+Maven
+
+Build & dependency management
+
+Allure
+
+Rapportage
+
+GitHub Actions
+
+CI/CD
+
+GitHub Pages
+
+Hosting van rapporten
+
+🧱 Architectuur
+
+🔹 Page Object Model
+
+Elke pagina heeft een eigen klasse
+
+BasePage bevat alle waits, safe actions en navigatie
+
+🔹 Cucumber BDD
+
+Feature files in Gherkin
+
+Steps in Java
+
+Hooks voor setup/teardown
+
+🔹 Playwright Factory
+
+Eén centrale plek voor browser/page lifecycle
+
+Ideaal voor parallel execution
+
+🔹 Allure integratie
+
+Cucumber plugin
+
+Environment, categories, executors
+
+Trend reporting via history‑preservation
+
+🔄 CI/CD Pipeline
+
+De pipeline:
 
 Installeert Playwright dependencies
 
 Draait alle tests
 
-Genereert Allure rapport
+Downloadt vorige Allure history
 
-Kopieert index.html  voor redirect
+Genereert een nieuw Allure‑rapport
 
 Publiceert naar GitHub Pages
 
+Update de README badge automatisch
+
 Volledige workflow staat in:
 
-Code
 .github/workflows/deploy.yml
+
 🎯 Waarom dit project?
-Dit framework toont mijn vaardigheden als:
 
-QA Automation Architect
+Dit framework demonstreert mijn vaardigheden in:
 
-Framework designer
+Testautomatiseringsarchitectuur
 
-CI/CD integrator
+CI/CD integratie
 
-Playwright specialist
+Playwright expertise
 
-BDD implementator
+BDD implementatie
 
-Het is gebouwd met focus op:
+Clean code & best practices
 
-schaalbaarheid
+Enterprise‑ready workflows
 
-onderhoudbaarheid
+Het is ontworpen als portfolio‑project om te laten zien hoe ik:
 
-enterprise‑compatibiliteit
+frameworks ontwerp
 
-moderne tooling
+pipelines bouw
 
-clean code
+tooling integreer
+
+kwaliteit borg
 
 📬 Contact
-Ben V. Broekhoven  
-Senior QA Automation Engineer / Test Architect
+
+Ben V. BroekhovenSenior QA Automation Engineer / Test ArchitectGitHub: https://github.com/benvbroekhoven

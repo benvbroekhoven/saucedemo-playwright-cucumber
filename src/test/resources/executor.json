@@ -1,0 +1,8 @@
+{
+  "name": "GitHub Actions",
+  "type": "github",
+  "url": "https://github.com/benvbroekhoven/saucedemo-playwright-cucumber",
+  "buildOrder": 1,
+  "reportName": "SauceDemo Playwright Report",
+  "reportUrl": "https://benvbroekhoven.github.io/saucedemo-playwright-cucumber/allure-report/"
+}

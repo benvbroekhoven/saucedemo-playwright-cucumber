@@ -1,0 +1,17 @@
+[
+  {
+    "name": "UI Issues",
+    "matchedStatuses": ["failed"],
+    "messageRegex": ".*Element.*not.*found.*"
+  },
+  {
+    "name": "Assertion Failures",
+    "matchedStatuses": ["failed"],
+    "messageRegex": ".*AssertionError.*"
+  },
+  {
+    "name": "Timeouts",
+    "matchedStatuses": ["failed"],
+    "messageRegex": ".*Timeout.*"
+  }
+]
