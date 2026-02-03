@@ -1,0 +1,8 @@
+"Epic","Feature","Story","FAILED","BROKEN","PASSED","SKIPPED","UNKNOWN"
+"","Login to SauceDemo","Successful login with standard user","0","0","1","0","0"
+"","Product interactions","Add multiple products","0","0","1","0","0"
+"","Product interactions","Add a single product","0","0","1","0","0"
+"","Login to SauceDemo","Login with invalid credentials","0","0","1","1","0"
+"","Product interactions","Remove multiple products","0","0","1","0","0"
+"","Product interactions","Remove a single product","0","0","1","0","0"
+"","Checkout process","Buy a product successfully","0","0","1","0","0"
