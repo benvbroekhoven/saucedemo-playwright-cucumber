@@ -56,7 +56,7 @@ jobs:
         run: |
           wget https://repo.maven.apache.org/maven2/io/qameta/allure/allure-commandline/2.24.0/allure-commandline-2.24.0.zip -O allure.zip
           unzip allure.zip -d allure-cli
-          sudo mv allure-cli/allure-commandline-2.24.0 /opt/allure
+          sudo mv allure-cli/allure-2.24.0 /opt/allure
           sudo ln -s /opt/allure/bin/allure /usr/bin/allure
 
       - name: Generate Allure report
