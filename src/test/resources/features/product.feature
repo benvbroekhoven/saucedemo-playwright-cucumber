@@ -1,7 +1,7 @@
 Feature: Product interactions
 
   Background:
-    Given I login with username "standard_user" and password "secret_sauce"
+    When I login with username "standard_user" and password "secret_sauce"
 
   Scenario: Add a single product
     When I add the product "Sauce Labs Backpack" to the cart
