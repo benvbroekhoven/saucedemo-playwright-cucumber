@@ -1,21 +1,59 @@
 name: Performance Tests
 
 on:
+  # Allows you to manually trigger the workflow from the GitHub Actions UI
   workflow_dispatch:
+
+  # Automatically runs the workflow whenever code is pushed to the main branch
   push:
     branches: [ main ]
 
 jobs:
   k6-performance:
+    # Use the latest Ubuntu runner provided by GitHub
     runs-on: ubuntu-latest
 
     steps:
+      # -------------------------------------------------------------
+      # 1. CHECK OUT THE REPOSITORY
+      # -------------------------------------------------------------
       - name: Checkout repository
         uses: actions/checkout@v4
+        # This step downloads your repository so the workflow can access your files
 
+      # -------------------------------------------------------------
+      # 2. ENSURE RESULTS DIRECTORY EXISTS
+      # -------------------------------------------------------------
+      - name: Create results directory
+        run: mkdir -p performance-tests/results
+        # k6 will write JSON output files here; the folder must exist beforehand
+
+      # -------------------------------------------------------------
+      # 3. INSTALL K6 (PERFORMANCE TESTING TOOL)
+      # -------------------------------------------------------------
       - name: Install k6
         uses: grafana/setup-k6-action@v1
+        # This installs the official k6 binary so we can run performance tests
 
+      # -------------------------------------------------------------
+      # 4. INSTALL NODE.JS (REQUIRED FOR THE CONVERTER + CHART GENERATION)
+      # -------------------------------------------------------------
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+        # Node.js is required to run the converter script and generate PNG charts
+
+      # -------------------------------------------------------------
+      # 5. INSTALL CHART LIBRARIES FOR GRAPH GENERATION
+      # -------------------------------------------------------------
+      - name: Install chart libraries
+        run: npm install chartjs-node-canvas chart.js
+        # These libraries allow us to generate PNG charts for Allure reports
+
+      # -------------------------------------------------------------
+      # 6. INSTALL ALLURE CLI (FOR REPORT GENERATION)
+      # -------------------------------------------------------------
       - name: Install Allure
         run: |
           sudo apt-get update
@@ -24,27 +62,53 @@ jobs:
           tar -xzf allure-2.29.0.tgz
           sudo mv allure-2.29.0 /opt/allure
           sudo ln -s /opt/allure/bin/allure /usr/bin/allure
+        # Allure CLI is used to generate the final HTML performance report
 
-      - name: Install chart libraries
-        run: npm install chartjs-node-canvas chart.js
+      # -------------------------------------------------------------
+      # 7. RUN ALL K6 PERFORMANCE TESTS (EACH OUTPUTS ITS OWN JSON FILE)
+      # -------------------------------------------------------------
+      - name: Run smoke test
+        run: k6 run --out json=performance-tests/results/smoke.json performance-tests/scripts/smoke-test.js
+        # Runs the smoke test and stores raw NDJSON output
 
-      - name: Create results directory
-        run: mkdir -p performance-tests/results
+      - name: Run login test
+        run: k6 run --out json=performance-tests/results/login.json performance-tests/scripts/login-test.js
+        # Runs the login performance test
 
-      - name: Run k6 with JSON output
-        run: k6 run --out json=performance-tests/results/results.json performance-tests/scripts/login-test.js
+      - name: Run checkout test
+        run: k6 run --out json=performance-tests/results/checkout.json performance-tests/scripts/checkout-test.js
+        # Runs the checkout performance test
 
-      - name: Convert k6 JSON to Allure format
+      # -------------------------------------------------------------
+      # 8. CONVERT RAW K6 OUTPUT INTO ALLURE-COMPATIBLE TESTCASES
+      # -------------------------------------------------------------
+      - name: Convert all k6 JSON to Allure testcases
         run: node performance-tests/converters/convert-k6-to-allure.js
+        # This script:
+        # - Reads all JSON files in performance-tests/results/
+        # - Extracts metrics (avg, p95, failures, etc.)
+        # - Generates PNG charts (histogram + trend)
+        # - Creates separate Allure testcases for each k6 script
 
+      # -------------------------------------------------------------
+      # 9. GENERATE THE FINAL ALLURE HTML REPORT
+      # -------------------------------------------------------------
       - name: Generate Allure report
         run: allure generate allure-results --clean -o site/performance-report
-             
+        # Converts all Allure JSON files into a full HTML report
+
+      # -------------------------------------------------------------
+      # 10. UPLOAD THE REPORT AS A GITHUB PAGES ARTIFACT
+      # -------------------------------------------------------------
       - name: Upload performance report
         uses: actions/upload-pages-artifact@v3
         with:
           path: site/performance-report
+        # This prepares the report for deployment to GitHub Pages
 
+  # -------------------------------------------------------------
+  # 11. DEPLOY THE REPORT TO GITHUB PAGES
+  # -------------------------------------------------------------
   deploy:
     needs: k6-performance
     runs-on: ubuntu-latest
@@ -55,3 +119,4 @@ jobs:
     steps:
       - name: Deploy to GitHub Pages
         uses: actions/deploy-pages@v4
+        # Publishes the HTML report so it becomes available as a public webpage
