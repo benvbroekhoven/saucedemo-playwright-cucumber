@@ -37,7 +37,7 @@ public class LoginSteps {
      * @param password The password to login with
      */
 
-    @When("I login with username {string} and password {string}")
+    @Given("I login with username {string} and password {string}")
     public void i_login_with_username_and_password(String username, String password) {
         loginFlow.loginExpectingSuccess(username, password);
     }

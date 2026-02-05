@@ -57,27 +57,6 @@ public class ProductSteps {
     }
 
     /**
-     * Step: "Then the cart should contain {int} items"
-     *
-     * Verifies that the shopping cart contains the expected number of items.
-     * The cart badge is checked to get the current count.
-     *
-     * Example usage in feature files:
-     *   Then the cart should contain 2 items
-     *   Then the cart should contain 0 items
-     *
-     * Uses AssertJ for clear assertion failures with descriptive messages.
-     *
-     * @param expectedCount The expected number of items in the cart
-     */
-    @Then("the cart should contain {int} items")
-    public void the_cart_should_contain_items(int expectedCount) {
-        Assertions.assertThat(productFlow.getCartCount())
-                .as("Cart count should match expected value")
-                .isEqualTo(expectedCount);
-    }
-
-    /**
      * Step: "When I remove the product {string} from the cart"
      *
      * Removes a single product from the shopping cart.
@@ -115,4 +94,17 @@ public class ProductSteps {
                         .toList()
         );
     }
+    /**
+     * Step: "When I go to the cart"
+     *
+     * Navigates to the shopping cart page and verifies it loaded correctly.
+     * Validates that cart badge count matches actual items in cart.
+     *
+     * Example: When I go to the cart
+     */
+    @When("I go to the cart")
+    public void i_go_to_the_cart() {
+        productFlow.goToCart();
+    }
+
 }

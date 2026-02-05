@@ -6,6 +6,9 @@ import com.microsoft.playwright.options.LoadState;
 import com.microsoft.playwright.options.WaitForSelectorState;
 import drivers.PlaywrightFactory;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * BasePage provides common functionality for all page objects.
  *
@@ -219,5 +222,63 @@ public abstract class BasePage {
     protected void navigateTo(String url) {
         page.navigate(url);
         waitForPageLoad();  // Ensure page is loaded before continuing
+    }
+    /**
+     * Gets the count of elements matching a selector.
+     * Returns 0 if no elements found (doesn't throw error).
+     *
+     * @param selector CSS or XPath selector
+     * @return Number of matching elements
+     */
+    protected int getElementCount(String selector) {
+        try {
+            return page.locator(selector).count();
+        } catch (Exception e) {
+            return 0;
+        }
+    }
+
+    /**
+     * Gets all inner texts of elements matching a selector.
+     * Useful for getting lists of product names, prices, etc.
+     *
+     * @param selector CSS or XPath selector
+     * @return List of text content (empty list if no elements found)
+     */
+    protected List<String> getAllTexts(String selector) {
+        try {
+            return page.locator(selector).allInnerTexts();
+        } catch (Exception e) {
+            return new ArrayList<>();
+        }
+    }
+
+    /**
+     * Checks if an element contains specific text.
+     *
+     * @param selector CSS or XPath selector
+     * @param text Text to search for
+     * @return true if element contains the text
+     */
+    protected boolean elementContainsText(String selector, String text) {
+        try {
+            String elementText = page.locator(selector).textContent();
+            return elementText != null && elementText.contains(text);
+        } catch (Exception e) {
+            return false;
+        }
+    }
+
+    /**
+     * Waits for an element to have specific text content.
+     *
+     * @param selector CSS or XPath selector
+     * @param expectedText Text to wait for
+     */
+    protected void waitForText(String selector, String expectedText) {
+        page.waitForFunction(
+                "selector => document.querySelector(selector).textContent.includes('" + expectedText + "')",
+                selector
+        );
     }
 }

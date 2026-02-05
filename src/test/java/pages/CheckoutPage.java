@@ -3,26 +3,22 @@ package pages;
 /**
  * CheckoutPage represents the checkout information form.
  *
- * This is the first step of checkout where users enter their
- * shipping information (first name, last name, postal code).
- *
  * Page URL: https://www.saucedemo.com/checkout-step-one.html
  */
 public class CheckoutPage extends BasePage {
 
-    // Locators for checkout form fields
     private final String firstNameInput = "[data-test='firstName']";
     private final String lastNameInput = "[data-test='lastName']";
     private final String postalCodeInput = "[data-test='postalCode']";
     private final String continueButton = "[data-test='continue']";
+    private final String cancelButton = "[data-test='cancel']";
+    private final String errorMessage = "[data-test='error']";
 
-    /**
-     * Verifies that the checkout page has loaded successfully.
-     *
-     * @return true if the first name input field is visible
-     */
     public boolean isLoaded() {
-        return safeIsVisible(firstNameInput);
+        return safeIsVisible(firstNameInput) &&
+                safeIsVisible(lastNameInput) &&
+                safeIsVisible(postalCodeInput) &&
+                safeIsVisible(continueButton);
     }
 
     /**
@@ -39,13 +35,106 @@ public class CheckoutPage extends BasePage {
     }
 
     /**
-     * Proceeds to the checkout overview page.
+     * Gets the current value of the first name field.
      *
-     * Clicks continue button after filling in information,
-     * then navigates to the order summary page.
+     * @return Current text in first name field
      */
+    public String getFirstNameValue() {
+        return page.locator(firstNameInput).inputValue();
+    }
+
+    /**
+     * Gets the current value of the last name field.
+     *
+     * @return Current text in last name field
+     */
+    public String getLastNameValue() {
+        return page.locator(lastNameInput).inputValue();
+    }
+
+    /**
+     * Gets the current value of the postal code field.
+     *
+     * @return Current text in postal code field
+     */
+    public String getPostalCodeValue() {
+        return page.locator(postalCodeInput).inputValue();
+    }
+
+    /**
+     * Checks if the form has been filled (basic validation).
+     *
+     * @return true if all fields have values
+     */
+    public boolean isFormFilled() {
+        return !getFirstNameValue().isEmpty() &&
+                !getLastNameValue().isEmpty() &&
+                !getPostalCodeValue().isEmpty();
+    }
+
     public void continueToOverview() {
         safeClick(continueButton);
-        waitForNetworkIdle();  // Wait for navigation to overview page
+        waitForNetworkIdle();
+    }
+
+    public void cancelCheckout() {
+        safeClick(cancelButton);
+        waitForNetworkIdle();
+    }
+
+    /**
+     * Attempts to continue with empty fields to trigger validation.
+     * Useful for testing error handling.
+     */
+    public void attemptContinueWithEmptyFields() {
+        // Clear all fields first
+        page.locator(firstNameInput).fill("");
+        page.locator(lastNameInput).fill("");
+        page.locator(postalCodeInput).fill("");
+        safeClick(continueButton);
+    }
+
+    public boolean isErrorVisible() {
+        return safeIsVisible(errorMessage);
+    }
+
+    public String getErrorText() {
+        return safeGetText(errorMessage);
+    }
+
+    /**
+     * Checks for specific error message.
+     *
+     * @param expectedError Partial error text to check for
+     * @return true if error contains expected text
+     */
+    public boolean hasError(String expectedError) {
+        return isErrorVisible() && getErrorText().contains(expectedError);
+    }
+
+    /**
+     * Attempts to proceed to checkout with validation.
+     * Returns false if checkout cannot proceed (e.g., empty cart redirects back).
+     *
+     * @return true if successfully reached checkout page
+     */
+    public boolean attemptCheckout() {
+        String currentUrl = page.url();
+
+        // Try to click continue
+        safeClick(continueButton);
+        waitForNetworkIdle();
+
+        // Check if we're still on checkout page (success) or redirected (failure)
+        return page.url().contains("checkout-step");
+    }
+
+    /**
+     * Checks if an error message about empty cart is displayed.
+     *
+     * @return true if empty cart error is shown
+     */
+    public boolean hasEmptyCartError() {
+        return isErrorVisible() && getErrorText().toLowerCase().contains("cart");
     }
 }

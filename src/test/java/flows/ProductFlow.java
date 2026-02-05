@@ -1,8 +1,7 @@
 package flows;
 
-import pages.InventoryPage;
 import pages.CartPage;
-
+import pages.InventoryPage;
 import java.util.List;
 
 public class ProductFlow {
@@ -10,49 +9,75 @@ public class ProductFlow {
     private final InventoryPage inventoryPage = new InventoryPage();
     private final CartPage cartPage = new CartPage();
 
-    // Voeg één product toe
     public void addProduct(String productName) {
-        inventoryPage.isLoaded();
+        // Ensure we're on inventory page first
+        inventoryPage.navigateToInventory();
+
+        // Verify product exists
+        if (!inventoryPage.isProductDisplayed(productName)) {
+            throw new IllegalArgumentException("Product not found: '" + productName + "'");
+        }
+
         inventoryPage.addItemToCart(productName);
     }
 
-    // Voeg meerdere producten toe
     public void addProducts(List<String> productNames) {
         inventoryPage.isLoaded();
         for (String product : productNames) {
-            inventoryPage.addItemToCart(product.trim());
+            addProduct(product.trim());
         }
     }
 
-    // Verwijder één product
     public void removeProduct(String productName) {
-        inventoryPage.isLoaded();
-        inventoryPage.removeItemFromCart(productName.trim());
+        inventoryPage.navigateToInventory();
+
+        if (!inventoryPage.isRemoveButtonVisible(productName)) {
+            throw new IllegalArgumentException("Product not in cart: '" + productName + "'");
+        }
+
+        inventoryPage.removeItemFromCart(productName);
     }
 
     public void removeProducts(List<String> productNames) {
         inventoryPage.isLoaded();
         for (String product : productNames) {
-            inventoryPage.removeItemFromCart(product.trim());
+            removeProduct(product.trim());
         }
     }
 
     public void clearCart(List<String> allProducts) {
         inventoryPage.isLoaded();
         for (String product : allProducts) {
-            inventoryPage.removeItemFromCart(product.trim());
+            // Only remove if it's showing the Remove button
+            if (inventoryPage.isRemoveButtonVisible(product)) {
+                removeProduct(product);
+            }
         }
     }
 
-
-    // Ga naar de cart
     public void goToCart() {
         inventoryPage.goToCart();
         cartPage.isLoaded();
+
+        // Verify cart consistency
+        if (!cartPage.isCartCountConsistent()) {
+            throw new AssertionError("Cart badge count doesn't match actual items");
+        }
     }
 
-    // Controleer cart count
     public int getCartCount() {
         return inventoryPage.getCartCount();
+    }
+
+    /**
+     * Verifies that specific products are in the cart.
+     *
+     * @param expectedProducts List of product names expected in cart
+     * @return true if all products are present
+     */
+    public boolean verifyProductsInCart(List<String> expectedProducts) {
+        goToCart();
+        List<String> actualProducts = cartPage.getCartItemNames();
+        return actualProducts.containsAll(expectedProducts);
     }
 }
