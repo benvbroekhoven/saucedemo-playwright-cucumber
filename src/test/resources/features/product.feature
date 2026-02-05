@@ -12,13 +12,11 @@ Feature: Product interactions
     Then the cart should contain 2 items
 
   Scenario: Remove a single product
-    Given I login with username "standard_user" and password "secret_sauce"
     And I add the product "Sauce Labs Backpack" to the cart
     When I remove the product "Sauce Labs Backpack" from the cart
     Then the cart should contain 0 items
 
   Scenario: Remove multiple products
-    Given I login with username "standard_user" and password "secret_sauce"
     And I add the products "Sauce Labs Backpack, Sauce Labs Bike Light" to the cart
     When I remove the products "Sauce Labs Backpack, Sauce Labs Bike Light" from the cart
     Then the cart should contain 0 items
