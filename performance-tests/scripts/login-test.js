@@ -13,7 +13,7 @@ export const options = {
 
 export default function () {
     // 1. Open de loginpagina
-    const res = http.get('https://www.saucedemo.com/');
+    const res = http.get('https://test-api.k6.io/public/crocodiles/');
 
     // 2. Basiscontrole: pagina moet 200 OK geven
     check(res, {
